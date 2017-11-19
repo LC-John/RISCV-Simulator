@@ -7,6 +7,9 @@
 class MEM
 {
 public:
+    unsigned char type;
+    ERROR_NUM err_no;
+
     MEM();
     void set_Reg(unsigned int arg_rd,
                  unsigned long long arg_alu,

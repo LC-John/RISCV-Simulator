@@ -21,6 +21,7 @@ EX::EX()
     ctrl.inst32_25_31 = 0;
     ctrl.inst32_2_6 = 0;
     ctrl.inst32_12_14 = 0;
+    err_no = NOTHING;
 }
 
 void EX::set_RegImm(unsigned int arg_rd,
@@ -331,7 +332,6 @@ ERROR_NUM EX::BranchCmp()
 
 ERROR_NUM EX::ALU()
 {
-    unsigned long long A, B;
     switch(get_ASel())
     {
     case ASEL_PC: A = pc; break;
@@ -428,15 +428,20 @@ ERROR_NUM EX::set_next_pc()
 void EX::print()
 {
     printf("  EX:\n");
+    printf("    status = %s\n", (err_no==NOTHING?"NTH":"STH"));
+    printf("    PC = %llx\n", pc);
+    printf("    inst type = %x\n", (unsigned char)type);
+    printf("    ALU in A = %llx\n", A);
+    printf("    ALU in B = %llx\n", B);
     printf("    ALU output = %llx\n", ALU_output);
-    printf("    next pc = %llx, current pc = %llx\n", next_pc, pc);
+    printf("    rd = %x\n", rd);
+    printf("    next pc = %llx\n", next_pc);
 }
 
 unsigned long long EX::get_cycles()
 {
     switch(get_ALUSel())
     {
-    case MUL32:
     case MUL64:
     case MUL64H:
     case MUL64HSU:
@@ -453,5 +458,35 @@ unsigned long long EX::get_cycles()
         return 40;
     default:
         return 1;
+    }
+}
+
+bool EX::is_mul64()
+{
+    switch(get_ALUSel())
+    {
+    case MUL64:
+    case MUL64H:
+    case MUL64HSU:
+    case MUL64HU:
+        return true;
+    default: return false;
+    }
+}
+
+bool EX::is_divrem()
+{
+    switch(get_ALUSel())
+    {
+    case DIV64:
+    case DIV64U:
+    case REM64:
+    case REM64U:
+    case DIV32:
+    case DIV32U:
+    case REM32:
+    case REM32U:
+        return true;
+    default: return false;
     }
 }

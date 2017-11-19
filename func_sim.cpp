@@ -49,7 +49,7 @@ void Func_Sim::load_memory(char* filename)
 
 void Func_Sim::one_step(bool verbose)
 {
-    int pc = inst_fetcher.get_pc();
+    unsigned long long pc = inst_fetcher.get_pc();
     if (pc < (unsigned long long)elf_reader.cvadr || pc > (unsigned long long)(elf_reader.cvadr + elf_reader.csize))
         err_no = INVALID_PC;
     if (pc % 4 != 0)
@@ -102,6 +102,7 @@ char Func_Sim::read_memory(long long addr)
 
 void Func_Sim::print_res()
 {
+    printf("\nFunction-sim Mode Done!\n");
     if (err_no == INVALID_PC)
     {
         printf("Invalid PC: 0x%016llx\n", inst_fetcher.get_pc());
@@ -109,12 +110,12 @@ void Func_Sim::print_res()
     }
     if (err_no == INVALID_INST)
     {
-        printf("Invalid inst: [%x] %08x\n", inst_fetcher.get_pc(), inst_fetcher.get_inst32());
+        printf("Invalid inst: [%llx] %08x\n", inst_fetcher.get_pc(), inst_fetcher.get_inst32());
         return;
     }
     if (err_no == INVALID_ADDR_ALIGNMENT)
     {
-        printf("Invalid address alignment: [%x] %08x\n", inst_fetcher.get_pc(), inst_fetcher.get_inst32());
+        printf("Invalid address alignment: [%llx] %08x\n", inst_fetcher.get_pc(), inst_fetcher.get_inst32());
         return;
     }
     if (err_no == HALT)

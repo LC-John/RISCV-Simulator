@@ -1,6 +1,8 @@
 #ifndef LISENCE_H
 #define LISENCE_H
 
+#include <cstdio>
+
 #define LC_RISCV_SIMULATOR
 #define THIS_IS_A_RISCV_SIMULATOR
 #define IF_YOU_HAVE_ANY_TROUBLE

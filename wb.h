@@ -7,6 +7,9 @@
 class WB
 {
 public:
+    unsigned char type;
+    ERROR_NUM err_no;
+
     WB();
     void set_pc(REG arg_pc);
     void set_Reg(unsigned int arg_rd,
@@ -17,6 +20,9 @@ public:
     REG get_pc();
     void print();
     unsigned long long get_cycles();
+    INST32_CTRL_BIT get_ctrl();
+    unsigned int get_rd();
+    unsigned long long get_wb();
 
 private:
     unsigned long long alu, mem_content;

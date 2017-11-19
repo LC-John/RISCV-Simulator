@@ -38,6 +38,7 @@ ID::ID()
     ctrl.inst32_25_31 = 0;
     ctrl.inst32_2_6 = 0;
     ctrl.inst32_12_14 = 0;
+    err_no = NOTHING;
 }
 
 void ID::set_RegImm(IMM_SET arg_imm,
@@ -134,6 +135,16 @@ REG ID::get_rs2_content()
     return rs2_content;
 }
 
+void ID::forward_rs1(REG arg_rs1_content)
+{
+    rs1_content = arg_rs1_content;
+}
+
+void ID::forward_rs2(REG arg_rs2_content)
+{
+    rs2_content = arg_rs2_content;
+}
+
 unsigned int ID::get_rd()
 {
     return rd;
@@ -157,12 +168,25 @@ REG ID::get_pc()
 void ID::print()
 {
     printf("  ID:\n");
-    printf("    reg[rs1] = %s = %08x\n", REG_NAME[rs1], rs1_content);
-    printf("    reg[rs2] = %s = %08x\n", REG_NAME[rs2], rs2_content);
+    printf("    status = %s\n", (err_no==NOTHING?"NTH":"STH"));
+    printf("    PC = %llx\n", pc);
+    printf("    inst type = %x\n", (unsigned char)type);
+    printf("    reg[rs1] = %s = %08llx\n", REG_NAME[rs1], rs1_content);
+    printf("    reg[rs2] = %s = %08llx\n", REG_NAME[rs2], rs2_content);
     printf("    extimm = %llx\n", extimm);
 }
 
 unsigned long long ID::get_cycles()
 {
     return 1;
+}
+
+unsigned int ID::get_rs1()
+{
+    return rs1;
+}
+
+unsigned int ID::get_rs2()
+{
+    return rs2;
 }

@@ -46,6 +46,7 @@ IF::IF()
     inst32_12_19 = 0;   // imm[19:12], UJ-type
     inst32_20_20 = 0;   // imm[11], UJ-type
     inst32_21_30 = 0;   // imm[10:1], UJ-type
+    err_no = NOTHING;
 }
 
 IF::IF(REG arg_next_pc)
@@ -292,8 +293,9 @@ void IF::set_type()
     case 0x3b:
         type = 'R'; break;
     default:
-        printf("Unknown Instruction: %x\n",
-               inst.inst32); break;
+        //printf("Unknown Instruction: %x\n",
+        //       inst.inst32);
+        break;
     }
 }
 
@@ -1096,19 +1098,11 @@ ERROR_NUM IF::just_sim(REG* reg, FREG* freg, char* memory)
 void IF::print()
 {
     printf("  IF:\n");
+    printf("    status = %s\n", (err_no==NOTHING?"NTH":"STH"));
+    printf("    PC = %llx\n", pc);
+    printf("    inst type = %x\n", (unsigned char)type);
     printf("    inst = %08x\n", get_inst32());
-    printf("    type = ");
-    switch(type)
-    {
-    case 'R': printf("R\n"); break;
-    case 'I': printf("I\n"); break;
-    case 'L': printf("I(LOAD)\n"); break;
-    case 'S': printf("S(STORE)\n"); break;
-    case 'U': printf("U\n"); break;
-    case 'J': printf("UJ\n"); break;
-    case 'B': printf("SB\n"); break;
-    defualt: printf("unknown\n"); break;
-    }
+    printf("    next PC = %llx\n", next_pc);
 }
 
 unsigned long long IF::get_cycles()

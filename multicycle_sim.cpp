@@ -262,88 +262,6 @@ void Multicycle_Sim::one_step(unsigned int verbose)
 
     regfile[0].out = 0;
 
-    /*
-    inst_fetcher.set_inst32(memory);
-    inst_fetcher.split32();
-    inst_fetcher.set_type();
-    if (verbose > 0)
-        inst_fetcher.print_assembly();
-    if (verbose > 1)
-        inst_fetcher.print();
-
-    inst_identifier.set_pc(inst_fetcher.get_pc());
-    inst_identifier.set_RegImm(inst_fetcher.get_imm_set(),
-                               inst_fetcher.get_rd(),
-                               inst_fetcher.get_rs1(),
-                               inst_fetcher.get_rs2());
-    inst_identifier.set_ctrl(inst_fetcher.get_ctrl_bit());
-    inst_identifier.read_regfile(regfile);
-    err_no = inst_identifier.imm_extension();
-    if (err_no != NOTHING)
-    {
-        err_loc = inst_identifier.get_pc();
-        return;
-    }
-    if (verbose > 1)
-        inst_identifier.print();
-
-    inst_executor.set_pc(inst_identifier.get_pc());
-    inst_executor.set_RegImm(inst_identifier.get_rd(),
-                             inst_identifier.get_rs1_content(),
-                             inst_identifier.get_rs2_content(),
-                             inst_identifier.get_imm64());
-    inst_executor.set_ctrl(inst_identifier.get_ctrl());
-    err_no = inst_executor.BranchCmp();
-    if (err_no != NOTHING)
-    {
-        err_loc = inst_executor.get_pc();
-        return;
-    }
-    err_no = inst_executor.ALU();
-    if (err_no != NOTHING)
-    {
-        err_loc = inst_executor.get_pc();
-        return;
-    }
-    err_no = inst_executor.set_next_pc();
-    if (err_no != NOTHING)
-    {
-        err_loc = inst_executor.get_pc();
-        return;
-    }
-    inst_fetcher.set_next_pc(inst_executor.get_next_pc());
-    if (verbose > 1)
-        inst_executor.print();
-
-    inst_memory.set_pc(inst_executor.get_pc());
-    inst_memory.set_Reg(inst_executor.get_rd(),
-                        inst_executor.get_ALU_output(),
-                        inst_executor.get_rs2());
-    inst_memory.set_ctrl(inst_executor.get_ctrl());
-    err_no = inst_memory.MemRW(memory);
-    if (err_no != NOTHING)
-    {
-        err_loc = inst_memory.get_pc();
-        return;
-    }
-    if (verbose > 1)
-        inst_memory.print();
-
-    inst_writor.set_pc(inst_memory.get_pc());
-    inst_writor.set_Reg(inst_memory.get_rd(),
-                        inst_memory.get_alu(),
-                        inst_memory.get_mem_content());
-    inst_writor.set_ctrl(inst_memory.get_ctrl());
-    err_no = inst_writor.WriteBack2Regfile(regfile);
-    if (err_no != NOTHING)
-    {
-        err_loc = inst_writor.get_pc();
-        return;
-    }
-    if (verbose > 1)
-        inst_writor.print();
-    */
-
     IFID_PROCEDURE(verbose);
     switch(type)
     {
@@ -399,6 +317,8 @@ char Multicycle_Sim::read_memory(long long addr)
 
 void Multicycle_Sim::print_res()
 {
+    printf("\nMulticycle-sim Mode Done!\n");
+
     if (err_no == INVALID_PC)
     {
         printf("Invalid PC: 0x%016llx\n", err_loc);

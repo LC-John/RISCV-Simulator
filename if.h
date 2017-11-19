@@ -6,6 +6,9 @@
 class IF
 {
 public:
+    unsigned char type;
+    ERROR_NUM err_no;
+
     IF();
     IF(REG arg_next_pc);
     void set_inst32(char* mem);
@@ -63,7 +66,6 @@ private:
     unsigned int inst32_21_30;  // imm[10:1], UJ-type
     unsigned int inst32_25_26;  // funct2, R4-type
     unsigned int inst32_27_31;  // rs3, R4-type
-    char type;
 };
 
 #endif // IF_H

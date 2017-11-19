@@ -7,6 +7,9 @@
 class EX
 {
 public:
+    unsigned char type;
+    ERROR_NUM err_no;
+
     EX();
     void set_RegImm(unsigned int arg_rd,
                     REG arg_rs1,
@@ -25,8 +28,11 @@ public:
     unsigned int get_rd();
     void print();
     unsigned long long get_cycles();
+    bool is_mul64();
+    bool is_divrem();
 
 private:
+    unsigned long long A, B;
     REG rs1, rs2;
     unsigned int rd;
     REG pc, next_pc;

@@ -143,6 +143,13 @@ typedef enum __PCSEL_CTRL
     PC_UNKNOWN
 } PCSEL_CTRL;
 
+typedef enum __STAGE_STATUS
+{
+    STAGE_NORMAL,
+    STAGE_STALL,
+    STAGE_NOPE
+} STAGE_STATUS;
+
 typedef enum __ERROR_NO
 {
     NOTHING,

@@ -20,6 +20,7 @@ MEM::MEM()
     ctrl.inst32_25_31 = 0;
     ctrl.inst32_2_6 = 0;
     ctrl.inst32_12_14 = 0;
+    err_no = NOTHING;
 }
 
 void MEM::set_Reg(unsigned int arg_rd,
@@ -166,6 +167,9 @@ unsigned int MEM::get_rd()
 void MEM::print()
 {
     printf("  MEM:\n");
+    printf("    status = %s\n", (err_no==NOTHING?"NTH":"STH"));
+    printf("    PC = %llx\n", pc);
+    printf("    inst type = %x\n", (unsigned char)type);
     switch (get_MemRW())
     {
     case MEM_READ_B:

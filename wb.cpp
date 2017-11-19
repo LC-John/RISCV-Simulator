@@ -22,6 +22,7 @@ WB::WB()
     ctrl.inst32_25_31 = 0;
     ctrl.inst32_2_6 = 0;
     ctrl.inst32_12_14 = 0;
+    err_no = NOTHING;
 }
 
 void WB::set_pc(REG arg_pc)
@@ -65,6 +66,11 @@ ERROR_NUM WB::WriteBack2Regfile(TEMPORAL_REG* regfile)
     case REGW_UNKNOWN: return INVALID_INST;
     default: return INVALID_INST;
     }
+}
+
+unsigned long long WB::get_wb()
+{
+    return wb;
 }
 
 WBSEL_CTRL WB::get_WBSel()
@@ -121,6 +127,9 @@ REG WB::get_pc()
 void WB::print()
 {
     printf("  WB:\n");
+    printf("    status = %s\n", (err_no==NOTHING?"NTH":"STH"));
+    printf("    PC = %llx\n", pc);
+    printf("    inst type = %x\n", (unsigned char)type);
     switch (get_RegWEn())
     {
     case REGW_Y:
@@ -134,4 +143,14 @@ void WB::print()
 unsigned long long WB::get_cycles()
 {
     return 1;
+}
+
+INST32_CTRL_BIT WB::get_ctrl()
+{
+    return ctrl;
+}
+
+unsigned int WB::get_rd()
+{
+    return rd;
 }

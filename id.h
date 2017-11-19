@@ -7,6 +7,9 @@
 class ID
 {
 public:
+    unsigned char type;
+    ERROR_NUM err_no;
+
     ID();
     void set_RegImm(IMM_SET arg_imm,
                     unsigned int arg_rd,
@@ -24,6 +27,10 @@ public:
     unsigned int get_rd();
     void print();
     unsigned long long get_cycles();
+    unsigned int get_rs1();
+    unsigned int get_rs2();
+    void forward_rs1(REG arg_rs1_content);
+    void forward_rs2(REG arg_rs2_content);
 
 private:
     IMM_SET imm;

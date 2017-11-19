@@ -1,5 +1,3 @@
-#include "func_sim.h"
-#include "multicycle_sim.h"
 #include "lisence.h"
 #include <cstdio>
 #include <iostream>
@@ -7,14 +5,22 @@
 using namespace std;
 
 //#define FUNC_SIM
-#define MULTICYCLE_SIM
+//#define MULTICYCLE_SIM
+#define PIPELINE_SIM
 
 #ifdef FUNC_SIM
+#include "func_sim.h"
 Func_Sim sim;
 #endif
 
 #ifdef MULTICYCLE_SIM
+#include "multicycle_sim.h"
 Multicycle_Sim sim;
+#endif
+
+#ifdef PIPELINE_SIM
+#include "pipeline_sim.h"
+Pipeline_Sim sim;
 #endif
 
 int main(int argc, char *argv[])
