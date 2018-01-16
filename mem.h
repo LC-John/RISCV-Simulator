@@ -17,6 +17,7 @@ public:
     void set_pc(REG arg_pc);
     void set_ctrl(INST32_CTRL_BIT arg_ctrl);
     ERROR_NUM MemRW(char* memory);
+    void get_meminfo(unsigned long long &addr, int &read, int &size);
     unsigned long long get_mem_content();
     REG get_pc();
     INST32_CTRL_BIT get_ctrl();

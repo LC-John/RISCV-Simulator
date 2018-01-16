@@ -72,6 +72,5 @@ int main(int argc, char *argv[])
     sim.sim(verbose);
     sim.print_res();
 
-
     return 0;
 }

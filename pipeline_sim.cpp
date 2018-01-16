@@ -26,6 +26,49 @@ Pipeline_Sim::Pipeline_Sim():
     memset(sigStall, 0, sizeof(sigStall));
     memset(memory, 0, sizeof(memory));
     memset(regfile, 0, sizeof(regfile));
+
+#ifdef USE_CACHE
+    l1.SetLower(&l2);
+    l2.SetLower(&llc);
+    llc.SetLower(&m);
+
+    StorageStats s;
+    s.access_time = 0;
+    s.miss_num = 0;
+    s.access_counter = 0;
+    s.fetch_num = 0;
+    s.replace_num = 0;
+    s.prefetch_num =0;
+    m.SetStats(s);
+    l1.SetStats(s);
+    l2.SetStats(s);
+    llc.SetStats(s);
+
+    StorageLatency l;
+    l.bus_latency = 0;
+    l.hit_latency = 1;
+    l1.SetLatency(l);
+    l.hit_latency = 8;
+    l2.SetLatency(l);
+    l.hit_latency = 20;
+    llc.SetLatency(l);
+    l.hit_latency = 100;
+    m.SetLatency(l);
+
+    CacheConfig cc;
+    cc.write_allocate = 1;
+    cc.write_through = 0;
+    cc.associativity = 8;
+    cc.size = 32 * 1024;
+    cc.set_num = 64;
+    l1.SetConfig(cc);
+    cc.size = 256 * 1024;
+    cc.set_num = 512;
+    l2.SetConfig(cc);
+    cc.size = 8 * 1024 * 1024;
+    cc.set_num = 16384;
+    llc.SetConfig(cc);
+#endif
 }
 
 bool Pipeline_Sim::readelf(char* filename, char* elfname, char** vals, int n_val)
@@ -98,6 +141,9 @@ void Pipeline_Sim::one_step(unsigned int verbose)
     load_use_hazard(verbose);
     multiply_conflict(verbose);
     divrem(verbose);
+#ifdef USE_CACHE
+    wait_cache(verbose);
+#endif
     nope_transfer();
     cycle_cnt++;
 }
@@ -148,6 +194,11 @@ void Pipeline_Sim::print_res()
     printf("Do nothing about control hazard.\n");
 #endif
 #endif
+#ifdef USE_CACHE
+    printf("Cache sim included.\n");
+#else
+    printf("Ideal memory (1 cycle)\n");
+#endif
 
     if (err_no == INVALID_PC)
     {
@@ -175,6 +226,33 @@ void Pipeline_Sim::print_res()
     printf("  Jalr caused = %llu\n", jalr_control_cnt);
     printf("  Wrong pred = %llu\n", wrong_branch_cnt);
     printf("Data hazard = %llu\n", load_use_hazard_cnt);
+#ifdef USE_CACHE
+    StorageStats ss;
+    l1.GetStats(ss);
+    printf("L1 Cache stats:\n");
+    printf("  Total access time = %d cycle\n", ss.access_time);
+    printf("  Miss rate = %.2f%%\n", (float)ss.miss_num/(float)ss.access_counter*100);
+    printf("    Access num = %d\n", ss.access_counter);
+    printf("    Miss num = %d\n", ss.miss_num);
+    printf("  Fetch num = %d\n", ss.fetch_num);
+    printf("  Replace num = %d\n", ss.replace_num);
+    l2.GetStats(ss);
+    printf("L2 Cache stats:\n");
+    printf("  Total access time = %d cycle\n", ss.access_time);
+    printf("  Miss rate = %.2f%%\n", (float)ss.miss_num/(float)ss.access_counter*100);
+    printf("    Access num = %d\n", ss.access_counter);
+    printf("    Miss num = %d\n", ss.miss_num);
+    printf("  Fetch num = %d\n", ss.fetch_num);
+    printf("  Replace num = %d\n", ss.replace_num);
+    llc.GetStats(ss);
+    printf("LLC Cache stats:\n");
+    printf("  Total access time = %d cycle\n", ss.access_time);
+    printf("  Miss rate = %.2f%%\n", (float)ss.miss_num/(float)ss.access_counter*100);
+    printf("    Access num = %d\n", ss.access_counter);
+    printf("    Miss num = %d\n", ss.miss_num);
+    printf("  Fetch num = %d\n", ss.fetch_num);
+    printf("  Replace num = %d\n", ss.replace_num);
+#endif
 
     for (unsigned long long val_i = 0; val_i < elf_reader.val_n; val_i++)
     {
@@ -337,10 +415,21 @@ void Pipeline_Sim::update_component(int verbose)
     }
     else if (verbose > 1)
         printf("  EX2:\n    NOP\n    %s\n", ex2_active?"Activated!":"Inactivated!");
-    if (!sigNope[STAGE_MEM])
+    if (!sigNope[STAGE_MEM] && !sigStall[STAGE_MEM])
     {
         if (inst_memory.err_no == NOTHING)
+        {
+            unsigned long long addr_;
+            int read_, size_, time_ = 0, hit_;
+            char content_[100];
             inst_memory.err_no = inst_memory.MemRW(memory);
+#ifdef USE_CACHE
+            inst_memory.get_meminfo(addr_, read_, size_);
+            if (read_ >= 0)
+                l1.HandleRequest(addr_, size_, read_, content_, hit_, time_);
+            wait_cache_time = time_;
+#endif
+        }
         if (verbose > 1)
             inst_memory.print();
     }
@@ -574,6 +663,28 @@ void Pipeline_Sim::divrem(int verbose)
     else if (verbose > 1)
         printf("  No div-rem stall detected!\n");
 }
+
+#ifdef USE_CACHE
+void Pipeline_Sim::wait_cache(int verbose)
+{
+    if (wait_cache_time <= 0)
+    {
+        if (verbose > 1)
+            printf("  No waiting for cache/memory!\n");
+        return;
+    }
+    if (--wait_cache_time > 0)
+    {
+        if (verbose > 1)
+            printf("  Waiting for cache/memory! Still need %d cycles...\n", wait_cache_time);
+        sigStall[STAGE_ID] = true;
+        sigStall[STAGE_IF] = true;
+        sigStall[STAGE_EX] = true;
+        sigStall[STAGE_EX2] = true;
+        sigStall[STAGE_MEM] = true;
+    }
+}
+#endif
 
 void Pipeline_Sim::nope_transfer()
 {

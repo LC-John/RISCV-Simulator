@@ -9,8 +9,12 @@
 #include "ex2.h"
 #include "mem.h"
 #include "wb.h"
+#include "memory.h"
+#include "cache.h"
 #include <cstdio>
 #include <iostream>
+
+#define USE_CACHE
 
 #define FS_MAX_MEMORY (4 * 1024 * 1024)
 #define FS_SP_DEFAULT (FS_MAX_MEMORY - 10000)
@@ -79,6 +83,14 @@ private:
 
     unsigned long long sext64(unsigned long long num, int sbit);
     bool RegWEn(INST32_CTRL_BIT ctrl);
+
+#ifdef USE_CACHE
+    Memory m;
+    Cache l1, l2, llc;
+    int wait_cache_time;
+
+    void wait_cache(int verbose);
+#endif
 };
 
 #endif // PIPELINE_SIM_H

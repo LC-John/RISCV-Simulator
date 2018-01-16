@@ -139,6 +139,27 @@ ERROR_NUM MEM::MemRW(char* memory)
     return NOTHING;
 }
 
+void MEM::get_meminfo(unsigned long long &addr, int &read, int &size)
+{
+    switch(get_MemRW())
+    {
+    case MEM_READ_B:        addr = alu; read = 1; size = 1; break;
+    case MEM_READ_H:        addr = alu; read = 1; size = 2; break;
+    case MEM_READ_W:        addr = alu; read = 1; size = 4; break;
+    case MEM_READ_BU:       addr = alu; read = 1; size = 1; break;
+    case MEM_READ_HU:       addr = alu; read = 1; size = 2; break;
+    case MEM_READ_WU:       addr = alu; read = 1; size = 4; break;
+    case MEM_READ_D:        addr = alu; read = 1; size = 8; break;
+    case MEM_WRITE_B:       addr = alu; read = 0; size = 1; break;
+    case MEM_WRITE_H:       addr = alu; read = 0; size = 2; break;
+    case MEM_WRITE_W:       addr = alu; read = 0; size = 4; break;
+    case MEM_WRITE_D:       addr = alu; read = 0; size = 8; break;
+    case MEM_DONT_CARE:     addr = alu; read = -1; size = -1; break;
+    case MEM_UNKNOWN:       addr = alu; read = -1; size = -1; break;
+    default:                addr = alu; read = -1; size = -1; break;
+    }
+}
+
 unsigned long long MEM::get_mem_content()
 {
     return mem_content;
