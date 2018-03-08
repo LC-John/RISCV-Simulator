@@ -1,7 +1,11 @@
 # RISCV-Simulator
 
-This is a project of Computer Organization and Achitecture, PKU. LAB2 and LAB3.2 are included.
+This is a project of Computer Organization and Achitecture, PKU. LAB2 and LAB3.2 are included. I believe my solution is quite elegant and may sparks you.
 
-The simulator simulates on RV64I and RV64F ISA. (There are still some bugs in RV64F)
+The simulator simulates on RV64I and RV64F ISA. (There are still some bugs in RV64F, yet I'm not going to debug them.)
 
-Last but the most important thing is that PLEASE DO NOT COPY!
+My report can be found at https://github.com/LC-John/Notes-and-homeworks/tree/master/体系实习.
+
+Last but the most important thing is that you can reference them, but **PLEASE DO NOT COPY**! If you copy this project and get caught, no one can help you, and you deserve nothing but a zero score. 
+
+Good luck and have fun. :)
