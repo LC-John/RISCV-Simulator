@@ -1,5 +1,7 @@
 # RISCV-Simulator
 
+[![Build Status](https://travis-ci.org/LC-John/RISCV-Simulator.svg?branch=master)](https://travis-ci.org/LC-John/RISCV-Simulator)
+
 This is a project of Computer Organization and Achitecture, PKU. LAB2 and LAB3.2 are included. I believe my solution is quite elegant and may sparks you.
 
 The simulator simulates on RV64I and RV64F ISA. (There are still some bugs in RV64F, yet I'm not going to debug them.)
