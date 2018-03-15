@@ -84,6 +84,6 @@ See the PDF reports at https://github.com/LC-John/Notes-and-homeworks/tree/maste
 
 Last but the most important thing is that you can reference them, but **PLEASE DO NOT COPY**! If you copy this project and get caught, no one can help you, and you deserve nothing but a zero score. 
 
-Heads up! I've inserted something into my code. It will somehow show the identification information of the true author, which is me. So anaing, **DO NOT COPY**.
+Heads up! I've inserted something into my code. It will somehow show the identification information of the true author, which is me. So again, **DO NOT COPY**.
 
 Good luck and have fun. :)
