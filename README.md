@@ -6,6 +6,8 @@ This is a project of Computer Organization and Achitecture, PKU. LAB2 and LAB3.2
 
 The simulator simulates on RV64I and RV64F ISA. (There are still some bugs in RV64F, yet I'm not going to debug them.)
 
+The specification of RISC-V ISA is available in this repo. Or you may retrieve the latest version from https://riscv.org/specifications/.
+
 Find more details at https://github.com/LC-John/Notes-and-homeworks/tree/master/体系实习.
 
 ## License
