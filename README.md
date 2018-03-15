@@ -60,7 +60,7 @@ This unit reads/writes a byte/half word/word/double word/*etc* to the data memor
 
 ![image](https://github.com/LC-John/RISCV-Simulator/blob/master/images/4.png)
 
-### Register File Writor (REG) unit
+### Register File Writor (WB) unit
 
 This unit write one register in the register file. The content has multiple sources.
 
