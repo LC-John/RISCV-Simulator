@@ -68,7 +68,7 @@ This unit write one register in the register file. The content has multiple sour
 
 ### Cache/Memory unit
 
-This unit is lately added. It simulates the data cache and the instruction cache.
+This unit is lately added. It simulates the data cache and the instruction cache. The cache hierarchy simulator is in anothr repo. Portal here! (https://github.com/LC-John/Cache-Simulator)
 
 ### Pipeline architecture
 
